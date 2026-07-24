@@ -44,7 +44,6 @@ class ITEM:
         self.goBreak = False
 class PLAYER:
     def __init__(self):
-        self.valueAtt = 10
         self.attPoints = 5
         self.level = 1
         self.gold = 0
@@ -1345,8 +1344,6 @@ def put_attributes(game = GAME()):
         if(game.attSelection!=5):
             cost_text = game.details.font20.render(f'COST: {cost}', True, "#FF0000")
             screen.blit(cost_text, (500-cost_text.get_size()[0]/2+random.randint(-1,1),150-cost_text.get_size()[1]/2+random.randint(-1,1)))
-    if(game.map.player.valueAtt<1):
-        game.map.player.valueAtt = 10
     if(game.attSelection==0):
         hp_text = game.details.font50.render(f'> HP: {game.map.player.attributes.hp} / {game.map.player.attributes.hpMax}', True, "#FFF67B")
         screen.blit(hp_text, (500-hp_text.get_size()[0]/2+random.randint(-1,1),250-hp_text.get_size()[1]/2+random.randint(-1,1)))
@@ -1398,28 +1395,23 @@ def put_attributes(game = GAME()):
             if(game.map.player.attPoints>0):
                 if(game.attSelection==0):
                     game.map.player.attPoints-=1
-                    game.map.player.attributes.hp+=game.map.player.valueAtt
+                    game.map.player.attributes.hp+=1
                     if(game.map.player.attributes.hp>game.map.player.attributes.hpMax):
                         game.map.player.attributes.hpMax = game.map.player.attributes.hp
-                    game.map.player.valueAtt-=1
                 if(game.attSelection==1):
                     game.map.player.attPoints-=1
                     game.map.player.attributes.defense+=1
-                    game.map.player.valueAtt-=1
                 if(game.attSelection==2):
                     game.map.player.attPoints-=1
                     game.map.player.attributes.strength+=1
-                    game.map.player.valueAtt-=1
                 if(game.attSelection==3):
                     if(game.map.player.attPoints>=game.map.player.attributes.intelligence):
                         game.map.player.attPoints-=(game.map.player.attributes.intelligence)
                         game.map.player.attributes.intelligence+=1
-                        game.map.player.valueAtt-=1
                 if(game.attSelection==4):
                     if(game.map.player.attPoints>=int((game.map.player.attributes.dexterity*10)-9)):
                         game.map.player.attPoints-=int(game.map.player.attributes.dexterity)
                         game.map.player.attributes.dexterity+=0.1
-                        game.map.player.valueAtt-=1
                 if(game.attSelection!=5):
                     game.map.spendAtt = False
             if(game.attSelection==5):
@@ -1549,7 +1541,6 @@ def create_map(game = GAME()):
             if(id>6):
                 id = random.randint(0,6)
             monster.id = id
-            valueAtt = 10
             monster.attributes.hpMax = 1
             monster.attributes.defense = 1
             monster.attributes.strength = 1
@@ -1566,20 +1557,15 @@ def create_map(game = GAME()):
                         if(monster.id==3):
                             if(random.random()<0.75):
                                 attribute = 4
-                        if(valueAtt<1):
-                            valueAtt = 10
                         if(attribute==0):
                             attPoints-=1
-                            monster.attributes.hpMax+=valueAtt
-                            valueAtt-=1
+                            monster.attributes.hpMax+=1
                         if(attribute==1):
                             attPoints-=1
                             monster.attributes.defense+=1
-                            valueAtt-=1
                         if(attribute==2):
                             attPoints-=1
                             monster.attributes.strength+=1
-                            valueAtt-=1
                         if(attribute==3):
                             if(attPoints>=monster.attributes.intelligence):
                                 attPoints-=monster.attributes.intelligence
