@@ -708,13 +708,17 @@ def render_dark(game = GAME()):
                     pygame.draw.circle(screen,"#000000",[X+25,Y+25],size)
             inter+=1
 #----------------------------------------------------------------------------------------------------------------------------------------
+size_font_cache = []
+for i in range(51):
+    font = pygame.font.SysFont('arialblack', i)
+    size_font_cache.append(font)
 def render_interface(game = GAME()):
     for damageObject in game.map.damagesView:
         if(damageObject.size>0):
-            font = pygame.font.SysFont('arialblack', damageObject.size)
-            damage_text = font.render(f"{damageObject.value}", True, "#e2e2e2")
+            if(damageObject.id==0):
+                damage_text = size_font_cache[damageObject.size].render(f"{damageObject.value}", True, "#e2e2e2")
             if(damageObject.id==1):
-                damage_text = font.render(f"{damageObject.value}", True, "#ff0000")
+                damage_text = size_font_cache[damageObject.size].render(f"{damageObject.value}", True, "#ff0000")
             screen.blit(damage_text, (damageObject.pos.x+random.randint(-1,1),damageObject.pos.y+random.randint(-1,1)))
             if(random.random()<0.25):
                 damageObject.size-=1
@@ -1322,8 +1326,6 @@ def put_attributes(game = GAME()):
                 pygame.draw.circle(screen,"#161616",[X+random.randint(10,40),Y+random.randint(10,40)],random.randint(1,10))
     floor_text = game.details.font20.render(f'Floor {game.map.floor}',True,"#ffffff")
     screen.blit(floor_text, (900,950))
-    value_text = game.details.font20.render(f'+{game.map.player.valueAtt}',True,"#ffffff")
-    screen.blit(value_text, (50,950))
     points_text = game.details.font50.render(f'ATTRIBUTES POINTS: {game.map.player.attPoints}', True, "#1EFF00")
     if(game.map.player.attPoints<=0):
         points_text = game.details.font50.render(f'ATTRIBUTES POINTS: {game.map.player.attPoints}', True, "#FF0000")
